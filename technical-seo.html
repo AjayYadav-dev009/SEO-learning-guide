@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Technical SEO Lab</title>
+<style>
+    * {
+        box-sizing: border-box
+    }
+
+    body {
+        margin: 0;
+        background: #f4f6f0;
+        color: #18271f;
+        font: 16px/1.6 system-ui, sans-serif
+    }
+
+    main {
+        max-width: 1100px;
+        margin: auto;
+        padding: clamp(16px, 4vw, 48px)
+    }
+
+    header {
+        background: #15392d;
+        color: #f5f8ec;
+        padding: clamp(22px, 5vw, 48px);
+        border-radius: 24px
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+        margin: 0 0 12px
+    }
+
+    h1 {
+        font: 700 clamp(2.2rem, 6vw, 4.5rem)/1 Georgia, serif;
+        letter-spacing: -.045em
+    }
+
+    h2 {
+        font: 700 2rem/1.15 Georgia, serif
+    }
+
+    h3 {
+        font-size: 1rem
+    }
+
+    header p {
+        max-width: 630px;
+        color: #dceadb
+    }
+
+    progress {
+        width: min(100%, 340px);
+        height: 10px;
+        accent-color: #bbeb86;
+        display: block;
+        margin: 8px 0
+    }
+
+    small {
+        font-weight: 650
+    }
+
+    .map {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        margin: 20px 0
+    }
+
+    button {
+        font: inherit;
+        cursor: pointer;
+        color: inherit;
+        border: 1px solid #cbd7ca;
+        border-radius: 10px;
+        background: white;
+        padding: 10px 14px;
+        text-align: left
+    }
+
+    button:hover {
+        background: #ebf5df
+    }
+
+    button:focus-visible {
+        outline: 3px solid #247249;
+        outline-offset: 2px
+    }
+
+    button[aria-current="step"],
+    button[aria-pressed="true"] {
+        background: #d9efbf;
+        border-color: #4b7454
+    }
+
+    .map button strong,
+    .map button span {
+        display: block
+    }
+
+    .map button span {
+        font-size: .78rem;
+        color: #41564a
+    }
+
+    .layout {
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: 18px
+    }
+
+    nav {
+        display: grid;
+        align-content: start;
+        gap: 6px
+    }
+
+    nav button {
+        font-size: .9rem;
+        padding: 8px 12px
+    }
+
+    article {
+        background: #fff;
+        border: 1px solid #dbe3d7;
+        border-radius: 18px;
+        padding: clamp(16px, 4vw, 32px)
+    }
+
+    pre {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        background: #19392e;
+        color: #edf7e7;
+        border-radius: 10px;
+        padding: 14px;
+        font-size: .88rem
+    }
+
+    .practice {
+        margin-top: 22px;
+        border-top: 1px solid #dbe3d7;
+        padding-top: 18px
+    }
+
+    .answers {
+        display: grid;
+        gap: 6px
+    }
+
+    .feedback {
+        margin: 10px 0 0;
+        color: #1d593b;
+        font-weight: 650
+    }
+
+    .actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 18px;
+        flex-wrap: wrap
+    }
+
+    .checks {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 10px 0
+    }
+
+    .checks label {
+        padding: 5px 9px;
+        border: 1px solid #dbe3d7;
+        border-radius: 8px
+    }
+
+    a {
+        color: #236044
+    }
+
+    details {
+        margin-top: 16px
+    }
+
+    summary {
+        cursor: pointer;
+        font-weight: 650
+    }
+
+    @media(max-width:680px) {
+        .layout {
+            grid-template-columns: 1fr
+        }
+
+        nav {
+            grid-template-columns: repeat(2, 1fr)
+        }
+
+        .map {
+            grid-template-columns: repeat(3, 1fr)
+        }
+    }
+</style>
+<main>
+    <header>
+        <h1>Technical SEO Lab</h1>
+        <p>Follow a page from discovery to search results. Then diagnose the kinds of issues you’ll see on WordPress,
+            Shopify, and custom sites.</p>
+        <small id="count">0 of 12 lessons passed</small>
+        <progress id="progress" max="12" value="0" aria-labelledby="count"></progress>
+    </header>
+    <section class="map" aria-label="How Google processes a page">
+        <button data-step="1"><strong>1 · Discover</strong><span>Find the URL</span></button>
+        <button data-step="2"><strong>2 · Crawl</strong><span>Fetch the page</span></button>
+        <button data-step="5"><strong>3 · Render</strong><span>See the content</span></button>
+        <button data-step="3"><strong>4 · Index</strong><span>Store a version</span></button>
+        <button data-step="0"><strong>5 · Serve</strong><span>Match a search</span></button>
+    </section>
+    <div class="layout">
+        <nav id="nav" aria-label="Course lessons"></nav>
+        <article aria-labelledby="title">
+            <small id="lessonNumber"></small>
+            <h2 id="title" tabindex="-1"></h2>
+            <p id="concept"></p>
+            <pre id="example"></pre>
+            <p id="check"></p>
+            <section id="lab" hidden>
+                <h3>Indexability simulator</h3>
+                <p>Toggle signals for a fictional product page that Google already knows about.</p>
+                <div class="checks">
+                    <label><input id="crawl" type="checkbox" checked> Crawl allowed</label>
+                    <label><input id="ok" type="checkbox" checked> HTTP 200</label>
+                    <label><input id="noindex" type="checkbox"> noindex present</label>
+                    <label><input id="duplicate" type="checkbox"> Canonical points elsewhere</label>
+                </div>
+                <p id="simulation" class="feedback" aria-live="polite"></p>
+            </section>
+            <section class="practice">
+                <h3>Practice case</h3>
+                <p id="question"></p>
+                <div class="answers" id="answers"></div>
+                <p id="feedback" class="feedback" aria-live="polite"></p>
+            </section>
+            <div class="actions">
+                <button id="back">← Previous lesson</button>
+                <button id="next">Next lesson →</button>
+            </div>
+            <details>
+                <summary>Google reference guides</summary>
+                <ul>
+                    <li><a href="https://developers.google.com/search/docs/fundamentals/how-search-works"
+                            target="_blank" rel="noopener">How Google Search works</a></li>
+                    <li><a href="https://developers.google.com/search/docs" target="_blank" rel="noopener">Google Search
+                            Central documentation</a></li>
+                    <li><a href="https://search.google.com/search-console/about" target="_blank" rel="noopener">Google
+                            Search Console</a></li>
+                </ul>
+            </details>
+        </article>
+    </div>
+</main>
+<script>
+    const lessons = [
+        ["Search fundamentals", "A URL is a page’s address. Google can discover that address, fetch the response, render the content, and decide whether to index a version. Indexed pages can appear in results when Google considers them relevant to a search.",
+            "Known URL → Fetched page → Rendered content → Indexed version → Search result",
+            "Open a page you manage. Write down its full URL and one search a customer might use to find it.",
+            "A service page is indexed but gets no impressions for “web design in Delhi.” What can you conclude?",
+            ["Google has indexed a version. Investigate query relevance and search performance next.", "Googlebot is blocked by robots.txt.", "Submitting the sitemap will guarantee impressions."], 0,
+            "Indexing makes appearance in results possible. Use Search Console’s Performance report to investigate impressions and queries."],
+        ["Links and sitemaps", "Google discovers URLs through links and can also learn about them from an XML sitemap. Use ordinary links with href attributes and connect important pages to relevant sections of your site.",
+            "Home → Shop → Planters → Ribbed Planter\n<a href=\"/products/ribbed-planter\">Ribbed planter</a>",
+            "Pick a product or service and trace a link path from the homepage. Check whether its preferred URL appears in the sitemap.",
+            "A product is in the sitemap but has zero internal links. What would you change?",
+            ["Add another copy of the URL to the sitemap.", "Link to it from a relevant collection or category.", "Add noindex to the collection."], 1,
+            "A relevant collection link gives people and crawlers a path to the product. An XML sitemap supports discovery."],
+        ["Crawling and HTTP", "The server returns a status when Google fetches a URL. A 200 is a successful response, a redirect sends the crawler elsewhere, a 404 means the resource is missing, and a 5xx points to a server-side failure. robots.txt can restrict which paths Googlebot fetches.",
+            "DevTools → Network → reload → document request → Status\nhttps://example.com/robots.txt",
+            "Inspect the document request for a live page. If it redirects, record both the starting URL and destination.",
+            "A page that should appear in search returns 503 every time you check it. What comes first?",
+            ["Rewrite the title tag.", "Add product structured data.", "Investigate the hosting or application error."], 2,
+            "The recurring server error prevents a reliable fetch. Fix it and verify the document response again."],
+        ["Indexability and noindex", "A robots meta tag or X-Robots-Tag response header can tell Google to exclude a page from its index. Google needs to fetch the URL to read that instruction.",
+            "<meta name=\"robots\" content=\"noindex\">\nX-Robots-Tag: noindex",
+            "Search View Page Source for noindex and inspect the document response headers. Try toggling both crawl access and noindex below.",
+            "A public product should be indexed. Crawling is allowed, the response is 200, and its HTML contains noindex. Where do you investigate?",
+            ["The setting, plugin, or template that adds the directive.", "The product image dimensions.", "The sitemap file name."], 0,
+            "Confirm the business wants the page indexed, then fix the source of the directive and verify the live response."],
+        ["Canonicals and redirects", "A canonical tag signals which URL you prefer among duplicate or very similar pages. Google can choose a different canonical. A permanent redirect sends visitors and crawlers to the replacement URL when a page moves.",
+            "Campaign copy: /services/seo?utm_source=email\nPreferred URL: /services/seo\n<link rel=\"canonical\" href=\"https://example.com/services/seo\">",
+            "Compare the canonical, internal links, and sitemap URL for the same page. They should generally agree on the preferred address.",
+            "The old service URL has permanently moved to a new slug with equivalent content. What should the old URL return?",
+            ["A 200 with the old content and a sitemap entry.", "A permanent redirect to the new service URL.", "A redirect to the homepage."], 1,
+            "Send the old URL directly to its equivalent replacement and update links and sitemap entries to the new URL."],
+        ["JavaScript rendering", "View Source shows the HTML delivered by the server. DevTools Elements shows the DOM after your browser processes it. Google also renders JavaScript, so check what its rendering sees when important content depends on scripts.",
+            "Initial HTML → JavaScript and network requests → Rendered content",
+            "Compare the product name, description, and internal links in source and Elements. With Search Console access, inspect the live tested page and its rendered HTML.",
+            "Your browser shows a product description. Google’s tested HTML is missing it, and the product API request fails during the test. What should you check?",
+            ["The preferred font for the description.", "The spelling of the sitemap path.", "Why the content request fails, and whether the server can deliver essentials in the initial HTML."], 2,
+            "Inspect the failing request first. Delivering essential content in the initial HTML can reduce dependence on that request."],
+        ["Mobile and Core Web Vitals", "Check that the mobile page carries the same essential content as desktop. Core Web Vitals measure main-content loading (LCP), interaction responsiveness (INP), and unexpected layout shifts (CLS). PageSpeed Insights can show real-user data when available. Its Lighthouse test helps diagnose problems in a controlled run.",
+            "Good at the 75th percentile · LCP ≤ 2.5 s · INP ≤ 200 ms · CLS ≤ 0.1",
+            "Test a page on your phone. Then run PageSpeed Insights and identify one cause you could verify, such as an oversized hero image or a layout shift.",
+            "A promo banner loads late and pushes the product title down. Which metric does this most directly affect?",
+            ["CLS", "INP", "LCP"], 0,
+            "The visible movement contributes to layout shift. Reserve appropriate space for the banner before it loads."],
+        ["Structured data", "Structured data describes entities and properties in machine-readable form. Google uses supported markup to determine eligibility for certain rich results. Match facts such as product price and availability to what the page shows.",
+            "Product → name + image + offers\nOffer → price + priceCurrency + availability",
+            "Run a product page through Google’s Rich Results Test. If the price is present in the markup, compare it with the visible price.",
+            "Your Shopify theme reports ₹999 in markup, but customers see ₹1,299. What should you fix?",
+            ["Add another Product block with a second price.", "Synchronize the structured data with the visible offer.", "Add the product to the sitemap twice."], 1,
+            "Trace the price back to the theme or app generating the markup and use the correct value."],
+        ["Store filters and URL variants", "Sort orders, filters, tracking parameters, and variants can create many URLs. Decide which URLs represent pages people genuinely need from search. Some filtered collections may deserve their own landing pages. Equivalent sorting and tracking copies usually do not.",
+            "/collections/planters?sort_by=price-ascending\n/collections/planters?utm_source=email\n/collections/terracotta-planters",
+            "List the URLs produced by one Shopify collection or WooCommerce category. Identify which show equivalent content and which serve a distinct search intent.",
+            "A price-sort URL shows exactly the same products in a different order. Which URL should you normally prefer in search?",
+            ["The price-sort URL.", "Both equally because the order changed.", "The clean collection URL."], 2,
+            "Use the clean collection as your preferred version and keep its internal links and sitemap consistent."],
+        ["International pages and hreflang", "Use hreflang when equivalent pages target different languages or regions. Each page in a cluster should reference itself and its alternates, and the alternates should reciprocate. Give each intended regional version a consistent canonical.",
+            "/en-in/planters  ↔  /en-gb/planters\nBoth pages list en-IN and en-GB alternates.",
+            "Inspect two regional pages if you have them. Compare each canonical and check whether the hreflang references point both ways.",
+            "The India page points to the UK alternate, but the UK page omits the India page. What is missing?",
+            ["The reciprocal hreflang reference.", "A redirect from the India page to the UK page.", "A shared canonical pointing both to the UK page."], 0,
+            "Add the return reference and verify the complete set of alternates on both pages."],
+        ["Search Console and migrations", "Use URL Inspection to compare Google’s last known indexing information with a live test. The live test helps check current access and rendering. A migration also needs old-to-new URL mapping, working redirects, updated links and sitemaps, and monitoring after launch.",
+            "Old URL → permanent redirect → equivalent new URL → verify response and canonical",
+            "Pick one changed slug. Follow the old link in DevTools and confirm where it ends. Inspect the new URL in Search Console if you have access.",
+            "Search Console reports yesterday’s noindex, but today’s live test can fetch the URL and shows no noindex. What does that tell you?",
+            ["Google has already indexed the new version.", "The current response looks fixed. Check the indexed status after Google recrawls.", "The old report proves the live page still sends noindex."], 1,
+            "The live test and indexed report describe different moments. Keep checking what Google records after recrawling."],
+        ["Audit capstone", "Audit a homepage, collection or service listing, and product or service detail page. Record the evidence for each issue, estimate its scope, fix the highest-impact cause, and repeat the check that exposed it.",
+            "URL · Evidence · Affected pages · Impact · Proposed fix · Verification\nExample: /products/vase · noindex in HTTP header · all products · indexing blocked · fix shared rule · retest response",
+            "On WordPress, start with the SEO plugin and template settings. On Shopify, check the theme and apps that generate tags or markup. On PHP, inspect the route, template, and server headers.",
+            "All product pages you want in search return 200 with noindex. Their hero images also load slowly. Which issue comes first?",
+            ["Optimize one product’s hero image.", "Rewrite the sitemap with more product URLs.", "Find and remove the unintended product-wide noindex, then verify representative pages."], 2,
+            "A shared indexing directive affecting every product has broad impact. Verify the fix on multiple pages before moving to performance."]
+    ];
+    const byId = id => document.getElementById(id);
+    const nav = byId("nav");
+    let current = 0;
+    let passed = new Set();
+    try { passed = new Set(JSON.parse(localStorage.getItem("technical-seo-lab") || "[]")); } catch { }
+    function updateProgress() {
+        byId("count").textContent = `${passed.size} of ${lessons.length} lessons passed`;
+        byId("progress").value = passed.size;
+        [...nav.children].forEach((button, i) => {
+            button.textContent = `${passed.has(i) ? "✓" : i + 1 + "."} ${lessons[i][0]}`;
+            if (i === current) button.setAttribute("aria-current", "step");
+            else button.removeAttribute("aria-current");
+        });
+    }
+    function openLesson(index, focus = true) {
+        if (!lessons[index]) return;
+        current = index;
+        const [title, concept, example, check, question, options, correct, explanation] = lessons[index];
+        for (const [id, value] of Object.entries({ title, concept, example, check, question })) byId(id).textContent = value;
+        byId("lessonNumber").textContent = `Lesson ${index + 1} of ${lessons.length}`;
+        byId("lab").hidden = index !== 3;
+        byId("feedback").textContent = "";
+        byId("answers").replaceChildren(...options.map((option, i) => {
+            const button = document.createElement("button");
+            button.textContent = option;
+            button.setAttribute("aria-pressed", "false");
+            button.onclick = () => {
+                [...byId("answers").children].forEach(b => b.setAttribute("aria-pressed", String(b === button)));
+                if (i === correct) {
+                    passed.add(index);
+                    try { localStorage.setItem("technical-seo-lab", JSON.stringify([...passed])); } catch { }
+                    updateProgress();
+                    byId("feedback").textContent = `Correct. ${explanation}`;
+                } else {
+                    byId("feedback").textContent = "Try again. Which option directly addresses the evidence in the case?";
+                }
+            };
+            return button;
+        }));
+        byId("back").disabled = index === 0;
+        byId("next").hidden = index === lessons.length - 1;
+        document.querySelectorAll("[data-step]").forEach(button => button.setAttribute("aria-pressed", String(Number(button.dataset.step) === index)));
+        updateProgress();
+        if (focus) byId("title").focus();
+    }
+    lessons.forEach((_, i) => {
+        const button = document.createElement("button");
+        button.onclick = () => openLesson(i);
+        nav.append(button);
+    });
+    document.querySelectorAll("[data-step]").forEach(button => {
+        button.onclick = () => openLesson(Number(button.dataset.step));
+    });
+    byId("back").onclick = () => openLesson(current - 1);
+    byId("next").onclick = () => openLesson(current + 1);
+    function simulate() {
+        const checked = id => byId(id).checked;
+        let result = "Eligible for consideration. Google still decides whether to index this URL.";
+        if (!checked("crawl")) result = "Fetch blocked. Google can know the URL, but it cannot fetch this response to read its directives.";
+        else if (!checked("ok")) result = "Inspect the HTTP status. A redirect, missing page, and server error each require a different diagnosis.";
+        else if (checked("noindex")) result = "Google can fetch the page and read noindex. That directive tells it to exclude the page from search.";
+        else if (checked("duplicate")) result = "The canonical points to another URL. Google may select that other version for indexing.";
+        byId("simulation").textContent = result;
+    }
+    byId("lab").addEventListener("change", simulate);
+    simulate();
+    openLesson(0, false);
+</script>
+
+</html>
