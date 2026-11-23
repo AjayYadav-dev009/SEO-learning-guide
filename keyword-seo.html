@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Keyword Research Lab</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf0f8;color:#151a36;font:16px/1.55 system-ui,sans-serif}header{background:#171938;color:white;padding:48px max(24px,calc((100% - 920px)/2)) 42px}header p{color:#c9cbed;margin-bottom:0}h1{font-size:clamp(2.25rem,6vw,4rem);letter-spacing:-.065em;line-height:1;margin:12px 0}small{font-size:.875rem;font-weight:700;letter-spacing:.06em;color:#bed7ff}main{max-width:968px;margin:auto;padding:24px}nav,.actions{display:flex;flex-wrap:wrap;gap:10px}nav button{flex:1;min-width:120px}button{font:inherit;font-weight:650;border:1px solid #c8cce0;border-radius:10px;background:white;color:#282750;padding:10px 16px;cursor:pointer}button:hover{border-color:#5545d0;background:#f1eeff}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #6e58ff;outline-offset:3px}nav [aria-current=true],.primary{background:#4732ba;color:white;border-color:#4732ba}.primary:hover,nav [aria-current=true]:hover{background:#362596;color:white}.card{background:white;border:1px solid #d9dced;border-radius:20px;padding:clamp(20px,4vw,42px);margin-top:14px;box-shadow:0 12px 35px #20224a0c}h2{font-size:1.8rem;line-height:1.15;margin:0 0 12px}.query{display:block;background:#eeebff;padding:14px 18px;border-radius:10px;color:#362596;font:600 1rem/1.5 ui-monospace,monospace;overflow-wrap:anywhere}fieldset{border:0;padding:0;margin:22px 0;min-width:0}legend{font-weight:700;margin-bottom:8px}.option{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;margin-bottom:6px;border:1px solid #d9dced;cursor:pointer}.option:has(input:checked){background:#f1eeff;border-color:#6e58ff}input{accent-color:#4732ba}.status{padding:12px 15px;background:#f0eff9;border-radius:8px}.status:empty{display:none}.good{background:#e5f6ec;color:#185c3b}.bad{background:#fff0db;color:#743d0b}progress{width:100%;accent-color:#5945d5}summary{cursor:pointer;font-weight:650}details{margin-top:20px}textarea{display:block;width:100%;min-height:130px;margin:10px 0 15px;padding:12px;border-radius:8px;border:1px solid #c8cce0;font:inherit}footer{color:#505675;margin:16px 0}
+</style>
+<header><small>TECHNICAL SEO COURSE · LESSON 2</small><h1>Keyword Research Lab</h1><p>Plan SEO pages for a bulk SMS provider in Dwarka.</p></header>
+<main>
+<nav aria-label="Practice modules"></nav>
+<p id="progressLabel"></p><progress id="meter" max="9" value="0" aria-labelledby="progressLabel"></progress>
+<section class="card" id="panel" aria-labelledby="heading"></section>
+<footer>Practice scenarios use simulated search results.</footer>
+</main>
+<script>
+const modules = [
+{ title:"Search intent", lesson:"Identify what the searcher wants to do. That tells you what kind of page to offer.", items:[
+["how does bulk sms work","What would satisfy this search?","A guide explaining how bulk SMS works","A sales form with no explanation","A list of nearby providers",0,"Look at the phrase ‘how does’.","The searcher wants to understand the process. An explainer can cover the steps and link to the service."],
+["bulk sms service provider in Dwarka","What would satisfy this search?","A general SMS glossary","A local service page with a quote request","A troubleshooting guide",1,"What does the location tell you?","The query combines a service and a location. Show how you serve Dwarka and make it easy to request a quote."],
+["bulk sms pricing for small businesses","What does this searcher need first?","The history of SMS","A developer setup guide","Rates or pricing factors they can compare",2,"Imagine they are evaluating three vendors.","Pricing is part of commercial investigation. Compare real search results before deciding between a pricing page and a section."]]},
+{ title:"Group keywords", lesson:"Group queries when one page can satisfy the same intent. Shared ranking URLs are one clue.", items:[
+["bulk sms company in Dwarka · bulk sms service provider in Dwarka","In this scenario, seven of the top ten URLs overlap. How would you group these?","Group them on one local service page","Build one page per wording","Group them on a tutorial page",0,"Compare what the searchers expect to find.","Both queries ask for a local provider. The shared results support a single page."],
+["how to send bulk sms with PHP · bulk sms provider in Dwarka","Results show tutorials for the first query and service pages for the second. What should you do?","Combine both on a PHP tutorial","Map them to a tutorial and a service page","Build only a pricing page",1,"What task can a PHP developer complete with a code example?","The first query calls for implementation guidance. The second calls for a provider. Separate pages can serve each purpose."],
+["bulk sms pricing · bulk sms cost calculator","Results for the second query mostly show interactive calculators. What should guide your choice?","Create a duplicate pricing page for the new wording","Choose whichever term is shorter","Check whether you can provide a meaningful calculator",2,"Think about the expected functionality.","People searching for a calculator expect to enter values and get an estimate. Only target it if the page can deliver that experience."]]},
+{ title:"Map to pages", lesson:"Check existing URLs and business fit before investing in new pages.", items:[
+["bulk sms service provider in Dwarka","You already have a relevant service page getting impressions for this query. What do you do first?","Improve the existing page","Launch a second near-identical page","Send everyone to the homepage",0,"Which URL already has evidence of visibility?","Review the existing page for missing content, local relevance, internal links, and conversion opportunities before adding another URL."],
+["free bulk sms sender online","Your client sells paid plans and has no free sender. What should you do?","Target it on the paid service page","Leave it out of the page map","Promise a free sender in the title",1,"Can the business deliver what the searcher expects?","The user expects a free tool they can use. Even high estimated demand would fail the business and intent checks."],
+["bulk sms in Dwarka · bulk sms meaning","You can improve one page this sprint. The agency’s goal is qualified sales enquiries. Which comes first?","A definition article because the topic is broad","Both terms on the homepage","The Dwarka service page with a quote action",2,"Which searcher is closer to contacting a provider?","Prioritize the service page for enquiries. A definition article can support it later through a relevant internal link."]]}
+];
+let state = { module:0, positions:[0,0,0], solved:[], draft:"" };
+try { const saved = localStorage.getItem("keyword-lab-v1"); if (saved) state = JSON.parse(saved); } catch {}
+const panel = document.querySelector("#panel");
+const nav = document.querySelector("nav");
+function save() { try { localStorage.setItem("keyword-lab-v1", JSON.stringify(state)); } catch {} }
+function render() {
+  const {module,positions,solved} = state;
+  document.querySelector("#meter").value = solved.length;
+  document.querySelector("#progressLabel").textContent = solved.length + " of 9 challenges completed";
+  nav.replaceChildren();
+  [...modules.map(item => item.title),"Final brief"].forEach((title,index) => {
+    const tab = document.createElement("button");
+    tab.textContent = title;
+    tab.setAttribute("aria-current", index === module ? "true" : "false");
+    tab.onclick = () => { state.module = index; save(); render(); document.querySelector("#heading").focus(); };
+    nav.append(tab);
+  });
+  if (module === modules.length) {
+    panel.innerHTML = '<h2 id="heading" tabindex="-1">Write your keyword brief</h2><p>The client offers paid bulk SMS in Dwarka and wants qualified enquiries. Write down your primary query, one supporting query, your target URL, the page type, and the page’s main action. Then explain why you grouped those queries.</p><label for="draft"><strong>Your brief</strong></label><textarea id="draft" placeholder="Primary query …"></textarea><details><summary>Compare with an example</summary><p><strong>Primary query</strong> — bulk sms service provider in Dwarka<br><strong>Supporting query</strong> — bulk sms company in Dwarka<br><strong>Target URL</strong> — /bulk-sms-service-provider-in-dwarka/<br><strong>Page type</strong> — Local service page<br><strong>Main action</strong> — Request a bulk SMS quote</p><p>Both queries ask for a provider in the same location. One well-built page can address both by explaining the offer, pricing factors, and how to get started.</p></details>';
+    const draft = document.querySelector("#draft");
+    draft.value = state.draft;
+    draft.oninput = () => { state.draft = draft.value; save(); };
+    return;
+  }
+  const current = modules[module];
+  const index = positions[module];
+  const [query,question,...rest] = current.items[index];
+  const [first,second,third,answer,hint,explanation] = rest;
+  const key = module * 3 + index;
+  const complete = solved.includes(key);
+  panel.innerHTML = '<h2 id="heading" tabindex="-1">'+current.title+'</h2><p>'+current.lesson+'</p><p>Challenge '+(index+1)+' of 3</p><code class="query">'+query+'</code><form><fieldset '+(complete?'disabled':'')+'><legend>'+question+'</legend>'+[first,second,third].map((choice,i)=>'<label class="option"><input type="radio" name="choice" value="'+i+'" '+(complete && i===answer?'checked':'')+'>'+choice+'</label>').join("")+'</fieldset><div class="actions">'+(complete?'':'<button class="primary" type="submit">Check answer</button><button type="button" id="hint">Show hint</button>')+'<button type="button" id="next">'+(complete?(index===2?'Continue':'Next challenge'):'Skip for now')+'</button></div><p id="feedback" class="status '+(complete?'good':'')+'" role="status">'+(complete?'Correct. '+explanation:'')+'</p></form>';
+  const feedback = document.querySelector("#feedback");
+  const hintButton = document.querySelector("#hint");
+  if (hintButton) hintButton.onclick = () => { feedback.className = "status"; feedback.textContent = hint; };
+  panel.querySelector("form").onsubmit = event => {
+    event.preventDefault();
+    if (complete) return;
+    const selected = new FormData(event.currentTarget).get("choice");
+    if (selected === null) { feedback.textContent = "Select an answer first."; return; }
+    if (Number(selected) !== answer) {
+      feedback.className = "status bad";
+      feedback.textContent = "Try again. " + hint;
+      return;
+    }
+    state.solved.push(key); save(); render(); document.querySelector("#next").focus();
+  };
+  document.querySelector("#next").onclick = () => {
+    if (index < 2) state.positions[module]++;
+    else { state.positions[module] = 0; state.module++; }
+    save(); render(); document.querySelector("#heading").focus();
+  };
+}
+render();
+</script>
+</html>
