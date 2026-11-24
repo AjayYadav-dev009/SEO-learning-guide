@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Content SEO Lab</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f7ee;color:#18291e;font:1rem/1.6 system-ui,sans-serif}
+main{max-width:960px;margin:auto;padding:clamp(18px,5vw,56px)}
+header{border-bottom:3px solid #39634b;margin-bottom:24px}h1{font-size:clamp(2.5rem,8vw,5rem);line-height:1.05;margin:.2em 0;font-family:Georgia,serif}
+section{background:white;border:1px solid #ced9c9;border-radius:16px;padding:clamp(16px,4vw,30px);margin:16px 0}
+h2{margin-top:0}label{display:block;margin-top:12px;font-weight:650}
+select,input[type=text],textarea{width:100%;font:inherit;padding:10px;border:1px solid #738777;border-radius:8px;background:#fcfdf9;color:inherit}
+textarea{min-height:100px;resize:vertical}button{font:inherit;padding:8px 16px;margin-top:12px;border:0;border-radius:8px;background:#24543c;color:white;cursor:pointer}
+summary{cursor:pointer;font-weight:650}details{margin:12px 0}output{display:block;font-weight:650;margin:8px 0}
+</style>
+</head>
+<body>
+<main>
+<header><p>SEO course · Lesson 4</p><h1>Content SEO Lab</h1><p>Choose a page format, write a brief, and revise your opening before you write the full page.</p></header>
+<section>
+<h2>1. Match the search intent</h2>
+<label for="query">Practice query</label>
+<select id="query">
+<option value="shopify">how to add a size chart in Shopify</option>
+<option value="compare">Shopify vs WooCommerce for a clothing store</option>
+<option value="buy">buy cotton kurtas for men online</option>
+</select>
+<p id="scenario"></p>
+<label for="format">Which page format serves this search?</label>
+<select id="format">
+<option value="">Choose a format</option>
+<option value="guide">Step-by-step tutorial</option>
+<option value="comparison">Comparison article</option>
+<option value="collection">Shoppable collection</option>
+</select>
+<button id="check" type="button">Check my answer</button>
+<output id="feedback" aria-live="polite"></output>
+</section>
+<section>
+<h2>2. Write the content brief</h2>
+<p>A brief defines who the page serves, what they should be able to do after reading, and what the page must cover. Each section should answer a question or help the reader take a step.</p>
+<label for="goal">Reader and goal</label>
+<input id="goal" type="text" placeholder="Who is searching, and what are they trying to do?">
+<label for="outline">Working H1 and supporting H2s</label>
+<textarea id="outline" placeholder="Sketch the page structure. Give each heading a distinct job."></textarea>
+<label for="evidence">Evidence and internal link</label>
+<textarea id="evidence" placeholder="What screenshot, test, or source would help? Which related page could you link to, and with what descriptive anchor text?"></textarea>
+<details><summary>Show a worked brief</summary><div id="example"></div></details>
+</section>
+<section>
+<h2>3. Draft and review the opening</h2>
+<label for="draft">Opening paragraph</label>
+<textarea id="draft" placeholder="Start with the answer or help the reader take the first step."></textarea>
+<output id="words" aria-live="polite">0 words</output>
+<p>Review your draft and brief against the checklist.</p>
+<label><input type="checkbox"> The opening delivers on the H1's promise.</label>
+<label><input type="checkbox"> The headings cover the questions the reader needs answered.</label>
+<label><input type="checkbox"> Claims are backed by evidence I can verify.</label>
+<label><input type="checkbox"> Any internal link helps the reader take a relevant next step.</label>
+<p>The word count is a drafting aid. Judge the draft by how well it serves the reader.</p>
+</section>
+<section>
+<h2>4. Review after publishing</h2>
+<p>In Search Console, filter the Performance report to your page and inspect the queries it appears for. If you see impressions for a relevant question the page barely covers, check whether adding an answer would help the reader. Record the edit date and compare impressions and clicks across comparable periods. Changes in demand and competition can also affect those numbers.</p>
+</section>
+</main>
+<script>
+const lessons = {
+  shopify: {
+    format: 'guide',
+    clue: 'The searcher runs a store and wants to complete a specific setup task.',
+    reason: 'A tutorial can show the setup in order and explain how to verify that the chart appears on the product page.',
+    brief: 'Reader: a clothing-store owner who wants a chart buyers can find. H1: How to add a size chart in Shopify. H2s: Check your theme options, add your measurements, and test the product page on mobile. Evidence: screenshots from a test store. Internal link: “how to preview Shopify theme changes”.'
+  },
+  compare: {
+    format: 'comparison',
+    clue: 'The searcher is choosing a platform and needs criteria for the decision.',
+    reason: 'A comparison can show trade-offs using the same criteria for both platforms.',
+    brief: 'Reader: a clothing-store owner choosing a platform. H1: Shopify vs WooCommerce for a clothing store. H2s: Setup and maintenance, size and colour variants, and recurring costs. Evidence: compare the same sample catalogue in both setups. Internal link: “plan your clothing product catalogue”.'
+  },
+  buy: {
+    format: 'collection',
+    clue: 'The searcher is ready to browse products and potentially make a purchase.',
+    reason: 'A shoppable collection lets buyers browse products and narrow them by size, colour, and price.',
+    brief: 'Reader: a shopper ready to browse men’s cotton kurtas. H1: Men’s cotton kurtas. Coverage: product listings, available sizes, fabric information, and delivery details. Evidence: accurate product measurements and fabric details. Internal link: “men’s kurta size guide”.'
+  }
+};
+
+const query = document.querySelector('#query');
+const format = document.querySelector('#format');
+const feedback = document.querySelector('#feedback');
+const draft = document.querySelector('#draft');
+
+function showScenario() {
+  const lesson = lessons[query.value];
+  document.querySelector('#scenario').textContent = lesson.clue;
+  document.querySelector('#example').textContent = lesson.brief;
+  format.value = '';
+  feedback.textContent = '';
+}
+
+query.addEventListener('change', showScenario);
+format.addEventListener('change', () => { feedback.textContent = ''; });
+document.querySelector('#check').addEventListener('click', () => {
+  const lesson = lessons[query.value];
+  if (!format.value) {
+    feedback.textContent = 'Choose a page format first.';
+    return;
+  }
+  feedback.textContent = format.value === lesson.format
+    ? lesson.reason
+    : 'Try again. Which format lets the reader accomplish the goal described above?';
+});
+
+draft.addEventListener('input', () => {
+  const words = draft.value.trim().match(/\S+/g)?.length ?? 0;
+  document.querySelector('#words').textContent = words === 1 ? '1 word' : words + ' words';
+});
+
+showScenario();
+</script>
+</body>
+</html>
